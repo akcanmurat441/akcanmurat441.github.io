@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>Logging in .net core 6</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Log.cs Modeli</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+<pre>
+<code id="htmlViewer" style="color:rgb(171, 178, 191); font-weight:400;background-color:rgb(40, 44, 52);background:rgb(40, 44, 52);display:block;padding: .5em;"><span style="color:rgb(198, 120, 221); font-weight:400;">namespace</span> <span style="color:rgb(97, 174, 238); font-weight:400;">OngulGroup.Domain.Entities</span>
+{
+    <span style="color:rgb(198, 120, 221); font-weight:400;">public</span> <span style="color:rgb(198, 120, 221); font-weight:400;">class</span> <span style="color:rgb(97, 174, 238); font-weight:400;">Log</span> 
+    {
+        <span style="color:rgb(198, 120, 221); font-weight:400;">public</span> <span style="color:rgb(230, 192, 123); font-weight:400;">int</span>? Id { <span style="color:rgb(198, 120, 221); font-weight:400;">get</span>; <span style="color:rgb(198, 120, 221); font-weight:400;">set</span>; }
+        <span style="color:rgb(198, 120, 221); font-weight:400;">public</span> <span style="color:rgb(230, 192, 123); font-weight:400;">string</span> ControllerName { <span style="color:rgb(198, 120, 221); font-weight:400;">get</span>; <span style="color:rgb(198, 120, 221); font-weight:400;">set</span>; }
+        <span style="color:rgb(198, 120, 221); font-weight:400;">public</span> <span style="color:rgb(230, 192, 123); font-weight:400;">string</span> ActionName { <span style="color:rgb(198, 120, 221); font-weight:400;">get</span>; <span style="color:rgb(198, 120, 221); font-weight:400;">set</span>; }
+        <span style="color:rgb(198, 120, 221); font-weight:400;">public</span> <span style="color:rgb(230, 192, 123); font-weight:400;">string</span> Description { <span style="color:rgb(198, 120, 221); font-weight:400;">get</span>; <span style="color:rgb(198, 120, 221); font-weight:400;">set</span>; }
+        <span style="color:rgb(198, 120, 221); font-weight:400;">public</span> <span style="color:rgb(230, 192, 123); font-weight:400;">string</span> LogType{ <span style="color:rgb(198, 120, 221); font-weight:400;">get</span>; <span style="color:rgb(198, 120, 221); font-weight:400;">set</span>; }
+        <span style="color:rgb(198, 120, 221); font-weight:400;">public</span> <span style="color:rgb(230, 192, 123); font-weight:400;">string</span> RequestType { <span style="color:rgb(198, 120, 221); font-weight:400;">get</span>; <span style="color:rgb(198, 120, 221); font-weight:400;">set</span>; }
+        <span style="color:rgb(198, 120, 221); font-weight:400;">public</span> <span style="color:rgb(230, 192, 123); font-weight:400;">int</span> ResponseStatusCode { <span style="color:rgb(198, 120, 221); font-weight:400;">get</span>; <span style="color:rgb(198, 120, 221); font-weight:400;">set</span>; }
+        <span style="color:rgb(198, 120, 221); font-weight:400;">public</span> DateTime CreatedDate { <span style="color:rgb(198, 120, 221); font-weight:400;">get</span>; <span style="color:rgb(198, 120, 221); font-weight:400;">set</span>; }
+        <span style="color:rgb(198, 120, 221); font-weight:400;">public</span> <span style="color:rgb(230, 192, 123); font-weight:400;">string</span> UserName { <span style="color:rgb(198, 120, 221); font-weight:400;">get</span>; <span style="color:rgb(198, 120, 221); font-weight:400;">set</span>; }
+        <span style="color:rgb(198, 120, 221); font-weight:400;">public</span> <span style="color:rgb(230, 192, 123); font-weight:400;">string</span> UserFullName { <span style="color:rgb(198, 120, 221); font-weight:400;">get</span>; <span style="color:rgb(198, 120, 221); font-weight:400;">set</span>; }
+    }
+}
+</code>
+</pre>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Logging.cs Attribute sayfası</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <pre>
+ <code id="htmlViewer" style="color:rgb(171, 178, 191); font-weight:400;background-color:rgb(40, 44, 52);background:rgb(40, 44, 52);display:block;padding: .5em;"><span style="color:rgb(198, 120, 221); font-weight:400;">using</span> Microsoft.AspNetCore.Mvc.Filters;
+<span style="color:rgb(198, 120, 221); font-weight:400;">using</span> Newtonsoft.Json;
+<span style="color:rgb(198, 120, 221); font-weight:400;">using</span> OngulGroup.Application.Abstracts.SOW;
+<span style="color:rgb(198, 120, 221); font-weight:400;">using</span> OngulGroup.Application.Utilities.Security;
+<span style="color:rgb(198, 120, 221); font-weight:400;">using</span> OngulGroup.Domain.Entities;
+<span style="color:rgb(198, 120, 221); font-weight:400;">using</span> System.Net;
+
+<span style="color:rgb(198, 120, 221); font-weight:400;">namespace</span> <span style="color:rgb(97, 174, 238); font-weight:400;">OngulGroup.API.Filters</span>
+{
+    <span style="color:rgb(198, 120, 221); font-weight:400;">public</span> <span style="color:rgb(198, 120, 221); font-weight:400;">class</span> <span style="color:rgb(97, 174, 238); font-weight:400;">LoggingAttribute</span> : <span style="color:rgb(97, 174, 238); font-weight:400;">Attribute</span>, <span style="color:rgb(97, 174, 238); font-weight:400;">IResultFilter</span>, <span style="color:rgb(97, 174, 238); font-weight:400;">IExceptionFilter</span>
+    {
+        <span style="color:rgb(171, 178, 191); font-weight:400;"><span style="color:rgb(198, 120, 221); font-weight:400;">public</span> <span style="color:rgb(198, 120, 221); font-weight:400;">void</span> <span style="color:rgb(97, 174, 238); font-weight:400;">OnException</span>(<span style="color:rgb(171, 178, 191); font-weight:400;">ExceptionContext context</span>)</span>
+        {
+            <span style="color:rgb(230, 192, 123); font-weight:400;">int</span> code = context.HttpContext.Response.StatusCode;
+
+            <span style="color:rgb(198, 120, 221); font-weight:400;">var</span> logService = context.HttpContext.RequestServices.GetService&lt;IServiceOfWork&gt;();
+
+            <span style="color:rgb(198, 120, 221); font-weight:400;">var</span> authorization = context.HttpContext.Request.Headers.Authorization.ToString();
+            <span style="color:rgb(198, 120, 221); font-weight:400;">if</span> (authorization.Contains(<span style="color:rgb(152, 195, 121); font-weight:400;">&quot;Token&quot;</span>) &amp;&amp; authorization.StartsWith(<span style="color:rgb(152, 195, 121); font-weight:400;">&quot;Token&quot;</span>))
+            {
+                <span style="color:rgb(198, 120, 221); font-weight:400;">var</span> token = authorization.Substring(<span style="color:rgb(152, 195, 121); font-weight:400;">&quot;Token&quot;</span>.Length).Trim();
+                <span style="color:rgb(198, 120, 221); font-weight:400;">if</span> (!String.IsNullOrWhiteSpace(token))
+                {
+                    <span style="color:rgb(230, 192, 123); font-weight:400;">string</span> seriUserData = EnDeCode.Decrypt(token, SecurityParameters.SifrelemeParametresi);
+                    <span style="color:rgb(198, 120, 221); font-weight:400;">var</span> data = JsonConvert.DeserializeObject&lt;UserData&gt;(seriUserData);
+
+
+                    <span style="color:rgb(230, 192, 123); font-weight:400;">string</span> actionName = context.HttpContext.Request.RouteValues[<span style="color:rgb(152, 195, 121); font-weight:400;">&quot;action&quot;</span>].ToString();
+                    <span style="color:rgb(230, 192, 123); font-weight:400;">string</span> controllerName = context.HttpContext.Request.RouteValues[<span style="color:rgb(152, 195, 121); font-weight:400;">&quot;controller&quot;</span>].ToString();
+                    <span style="color:rgb(230, 192, 123); font-weight:400;">string</span> requestType = context.HttpContext.Request.Method;
+
+                    Log log = <span style="color:rgb(198, 120, 221); font-weight:400;">new</span> Log()
+                    {
+
+                        ActionName = actionName,
+                        ControllerName = controllerName,
+                        CreatedDate = DateTime.Now,
+                        RequestType = requestType,
+                        UserName = data[SecurityParameters.EPosta],
+                        UserFullName = data[SecurityParameters.UserFullName],
+                        ResponseStatusCode = <span style="color:rgb(209, 154, 102); font-weight:400;">500</span>,
+                        LogType = <span style="color:rgb(152, 195, 121); font-weight:400;">&quot;Exception&quot;</span>,
+                        Description = <span style="color:rgb(152, 195, 121); font-weight:400;">$&quot;<span style="color:rgb(224, 108, 117); font-weight:400;">{data[SecurityParameters.UserFullName]}</span> adlı kullanıcı tarafından <span style="color:rgb(224, 108, 117); font-weight:400;">{controllerName}</span>/<span style="color:rgb(224, 108, 117); font-weight:400;">{actionName}</span> adresine <span style="color:rgb(224, 108, 117); font-weight:400;">{requestType}</span> isteğinde hata oluştu. Hata Mesajı: <span style="color:rgb(224, 108, 117); font-weight:400;">{context.Exception.Message}</span>&quot;</span>
+                    };
+                    logService.LogService.AddAsync(log).Wait();
+                }
+            }
+        }
+
+        <span style="color:rgb(171, 178, 191); font-weight:400;"><span style="color:rgb(198, 120, 221); font-weight:400;">public</span> <span style="color:rgb(198, 120, 221); font-weight:400;">void</span> <span style="color:rgb(97, 174, 238); font-weight:400;">OnResultExecuted</span>(<span style="color:rgb(171, 178, 191); font-weight:400;">ResultExecutedContext context</span>)</span>
+        {
+            <span style="color:rgb(198, 120, 221); font-weight:400;">var</span> logService = context.HttpContext.RequestServices.GetService&lt;IServiceOfWork&gt;();
+
+            <span style="color:rgb(198, 120, 221); font-weight:400;">var</span> authorization = context.HttpContext.Request.Headers.Authorization.ToString();
+            <span style="color:rgb(198, 120, 221); font-weight:400;">if</span> (authorization.Contains(<span style="color:rgb(152, 195, 121); font-weight:400;">&quot;Token&quot;</span>) &amp;&amp; authorization.StartsWith(<span style="color:rgb(152, 195, 121); font-weight:400;">&quot;Token&quot;</span>))
+            {
+                <span style="color:rgb(198, 120, 221); font-weight:400;">var</span> token = authorization.Substring(<span style="color:rgb(152, 195, 121); font-weight:400;">&quot;Token&quot;</span>.Length).Trim();
+                <span style="color:rgb(198, 120, 221); font-weight:400;">if</span> (!String.IsNullOrWhiteSpace(token))
+                {
+                    <span style="color:rgb(230, 192, 123); font-weight:400;">string</span> seriUserData = EnDeCode.Decrypt(token, SecurityParameters.SifrelemeParametresi);
+                    <span style="color:rgb(198, 120, 221); font-weight:400;">var</span> data = JsonConvert.DeserializeObject&lt;UserData&gt;(seriUserData);
+
+
+                    <span style="color:rgb(230, 192, 123); font-weight:400;">string</span> actionName = context.HttpContext.Request.RouteValues[<span style="color:rgb(152, 195, 121); font-weight:400;">&quot;action&quot;</span>].ToString();
+                    <span style="color:rgb(230, 192, 123); font-weight:400;">string</span> controllerName = context.HttpContext.Request.RouteValues[<span style="color:rgb(152, 195, 121); font-weight:400;">&quot;controller&quot;</span>].ToString();
+                    <span style="color:rgb(230, 192, 123); font-weight:400;">string</span> requestType = context.HttpContext.Request.Method;
+                    <span style="color:rgb(230, 192, 123); font-weight:400;">int</span> statusCode = context.HttpContext.Response.StatusCode;
+                    
+                    Log log = <span style="color:rgb(198, 120, 221); font-weight:400;">new</span> Log()
+                    {
+
+                        ActionName = actionName,
+                        ControllerName = controllerName,
+                        CreatedDate = DateTime.Now,
+                        RequestType = requestType,
+                        UserName = data[SecurityParameters.EPosta],
+                        UserFullName = data[SecurityParameters.UserFullName],
+                        LogType = statusCode &lt; <span style="color:rgb(209, 154, 102); font-weight:400;">200</span> ? <span style="color:rgb(152, 195, 121); font-weight:400;">&quot;Information&quot;</span> : statusCode &lt; <span style="color:rgb(209, 154, 102); font-weight:400;">300</span> ? <span style="color:rgb(152, 195, 121); font-weight:400;">&quot;Successful&quot;</span> : statusCode &lt; <span style="color:rgb(209, 154, 102); font-weight:400;">400</span> ? <span style="color:rgb(152, 195, 121); font-weight:400;">&quot;Redirection&quot;</span> : statusCode &lt; <span style="color:rgb(209, 154, 102); font-weight:400;">500</span> ? <span style="color:rgb(152, 195, 121); font-weight:400;">&quot;Client Error&quot;</span> : <span style="color:rgb(152, 195, 121); font-weight:400;">&quot;Server Error&quot;</span>,
+                        ResponseStatusCode = statusCode,
+                        Description = <span style="color:rgb(152, 195, 121); font-weight:400;">$&quot;<span style="color:rgb(224, 108, 117); font-weight:400;">{data[SecurityParameters.UserFullName]}</span> adlı kullanıcı tarafından <span style="color:rgb(224, 108, 117); font-weight:400;">{controllerName}</span>/<span style="color:rgb(224, 108, 117); font-weight:400;">{actionName}</span> adresine <span style="color:rgb(224, 108, 117); font-weight:400;">{requestType}</span> isteği atıldı. İşlem başarıyla sonuçlandı.&quot;</span>
+                    };
+                    <span style="color:rgb(92, 99, 112); font-weight:400;">//log.LogType = (context.Result is StatusCodeResult) ? context.Result.GetType().Name : ((context.Result as ObjectResult).Value as ProblemDetails).Title;</span>
+                    HttpStatusCode code = (HttpStatusCode)statusCode;
+                    log.LogType = code.ToString();
+                    logService.LogService.AddAsync(log).Wait();
+                }
+            }
+        }
+
+        <span style="color:rgb(171, 178, 191); font-weight:400;"><span style="color:rgb(198, 120, 221); font-weight:400;">public</span> <span style="color:rgb(198, 120, 221); font-weight:400;">void</span> <span style="color:rgb(97, 174, 238); font-weight:400;">OnResultExecuting</span>(<span style="color:rgb(171, 178, 191); font-weight:400;">ResultExecutingContext context</span>)</span>
+        {
+
+        }
+    }
+}
+</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Log Service</h1>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <pre>
+<code id="htmlViewer" style="color:rgb(171, 178, 191); font-weight:400;background-color:rgb(40, 44, 52);background:rgb(40, 44, 52);display:block;padding: .5em;"><span style="color:rgb(198, 120, 221); font-weight:400;">using</span> OngulGroup.Application.Abstracts.Services;
+<span style="color:rgb(198, 120, 221); font-weight:400;">using</span> OngulGroup.Application.Abstracts.UOW;
+<span style="color:rgb(198, 120, 221); font-weight:400;">using</span> OngulGroup.Domain.Entities;
+
+<span style="color:rgb(198, 120, 221); font-weight:400;">namespace</span> <span style="color:rgb(97, 174, 238); font-weight:400;">OngulGroup.Persistence.Concrete.Services</span>
+{
+    <span style="color:rgb(198, 120, 221); font-weight:400;">public</span> <span style="color:rgb(198, 120, 221); font-weight:400;">class</span> <span style="color:rgb(97, 174, 238); font-weight:400;">LogService</span> : <span style="color:rgb(97, 174, 238); font-weight:400;">ILogService</span>
+    {
+        <span style="color:rgb(198, 120, 221); font-weight:400;">private</span> <span style="color:rgb(198, 120, 221); font-weight:400;">readonly</span> IUnitOfWork unit;
+
+        <span style="color:rgb(171, 178, 191); font-weight:400;"><span style="color:rgb(198, 120, 221); font-weight:400;">public</span> <span style="color:rgb(97, 174, 238); font-weight:400;">LogService</span>(<span style="color:rgb(171, 178, 191); font-weight:400;">IUnitOfWork unit</span>)</span>
+        {
+            <span style="color:rgb(198, 120, 221); font-weight:400;">this</span>.unit = unit;
+        }
+
+        <span style="color:rgb(171, 178, 191); font-weight:400;"><span style="color:rgb(198, 120, 221); font-weight:400;">public</span> <span style="color:rgb(198, 120, 221); font-weight:400;">async</span> Task&lt;<span style="color:rgb(230, 192, 123); font-weight:400;">bool</span>&gt; <span style="color:rgb(97, 174, 238); font-weight:400;">AddAsync</span>(<span style="color:rgb(171, 178, 191); font-weight:400;">Log log</span>)</span>
+        {
+            <span style="color:rgb(198, 120, 221); font-weight:400;">try</span>
+            {
+                <span style="color:rgb(198, 120, 221); font-weight:400;">await</span> unit.LogRepo.AddTAsync(log);
+                <span style="color:rgb(198, 120, 221); font-weight:400;">await</span> unit.SaveAsync();
+                <span style="color:rgb(198, 120, 221); font-weight:400;">return</span> <span style="color:rgb(86, 182, 194); font-weight:400;">true</span>;
+            }
+            <span style="color:rgb(198, 120, 221); font-weight:400;">catch</span>
+            {
+                <span style="color:rgb(198, 120, 221); font-weight:400;">return</span> <span style="color:rgb(86, 182, 194); font-weight:400;">false</span>;
+            }  
+        }
+
+        <span style="color:rgb(171, 178, 191); font-weight:400;"><span style="color:rgb(198, 120, 221); font-weight:400;">public</span> List&lt;Log&gt; <span style="color:rgb(97, 174, 238); font-weight:400;">GetAll</span>()</span>
+        {
+            <span style="color:rgb(198, 120, 221); font-weight:400;">return</span> unit.LogRepo.GetAllT().ToList();
+        }
+    }
+}
+</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>program.cs eklenmesi gereken kod</h1>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+<pre>
+<code id="htmlViewer" style="color:rgb(171, 178, 191); font-weight:400;background-color:rgb(40, 44, 52);background:rgb(40, 44, 52);display:block;padding: .5em;"><span style="color:rgb(198, 120, 221); font-weight:400;">var</span> builder = <span class="hljs-title class_">WebApplication</span>.<span class="hljs-title class_">CreateBuilder</span>(args);
+
+builder.<span style="color:rgb(171, 178, 191); font-weight:400;">Services</span>.<span class="hljs-title class_">AddControllers</span>(<span style="color:rgb(171, 178, 191); font-weight:400;"><span style="color:rgb(171, 178, 191); font-weight:400;">options</span> =&gt;</span>
+{
+options.<span style="color:rgb(171, 178, 191); font-weight:400;">Filters</span>.<span style="color:rgb(171, 178, 191); font-weight:400;">Add</span>&lt;<span class="hljs-title class_">LoggingAttribute</span>&gt;();
+});</code></pre>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
